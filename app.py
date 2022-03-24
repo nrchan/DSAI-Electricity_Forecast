@@ -41,15 +41,13 @@ if __name__ == '__main__':
     # You can modify it at will.
     dfpast = pd.read_csv("data2021.csv", names=None, header=0)
     dfpast["日期"] = pd.to_datetime(dfpast["日期"], format="%Y%m%d")
-    #dfpast["備轉容量(萬瓩)"] = 10*dfpast["備轉容量(萬瓩)"]
-    #dfpast = dfpast.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
     
     df2022 = pd.read_csv("data2022.csv", names=None, header=0)
     df2022["日期"] = pd.to_datetime(df2022["日期"], format="%Y/%m/%d")
     df2022["備轉容量(萬瓩)"] = 10*df2022["備轉容量(萬瓩)"]
     df2022 = df2022.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
 
-    df = pd.concat([dfpast,df2022]).reset_index(drop = True)
+    df = pd.concat([dfpast,df2022]).reset_index(drop = True).dropna(axis=1)
     #print(adf_test(df["備轉容量(MW)"]))
     #print(kpss_test(df["備轉容量(MW)"]))
     
@@ -80,3 +78,16 @@ if __name__ == '__main__':
     plt.plot(predictions,label = "forecasts", color='darkorange')
     plt.title("ARIMA Model", size = 14)
     plt.show()
+    """
+
+    train = np.asarray(df["備轉容量(MW)"])
+    model = ARIMA(train, seasonal_order=(7,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
+    model = model.fit()
+
+    forecast = model.predict(start=len(train), end=len(train)+14)
+    print(forecast)
+    plt.figure(figsize = (10,6))
+    plt.plot(forecast, color = "cornflowerblue")
+    plt.title("ARIMA Model", size = 14)
+    plt.show()
+    """
