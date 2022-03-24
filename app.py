@@ -39,15 +39,17 @@ if __name__ == '__main__':
 
     # The following part is an example.
     # You can modify it at will.
-    df2021 = pd.read_csv("data2021.csv", names=None, header=0)
-    df2021["日期"] = pd.to_datetime(df2021["日期"], format="%Y%m%d")
+    dfpast = pd.read_csv("data2021.csv", names=None, header=0)
+    dfpast["日期"] = pd.to_datetime(dfpast["日期"], format="%Y%m%d")
+    #dfpast["備轉容量(萬瓩)"] = 10*dfpast["備轉容量(萬瓩)"]
+    #dfpast = dfpast.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
     
     df2022 = pd.read_csv("data2022.csv", names=None, header=0)
     df2022["日期"] = pd.to_datetime(df2022["日期"], format="%Y/%m/%d")
     df2022["備轉容量(萬瓩)"] = 10*df2022["備轉容量(萬瓩)"]
     df2022 = df2022.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
 
-    df = pd.concat([df2021,df2022]).reset_index(drop = True).dropna(axis=1)
+    df = pd.concat([dfpast,df2022]).reset_index(drop = True)
     #print(adf_test(df["備轉容量(MW)"]))
     #print(kpss_test(df["備轉容量(MW)"]))
     
