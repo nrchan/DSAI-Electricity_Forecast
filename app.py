@@ -58,7 +58,7 @@ if __name__ == '__main__':
     delta = (df["日期"][len(df)-1] - startDate).days + 1
 
     train = np.array(df["備轉容量(MW)"])
-    model = ARIMA(train, seasonal_order=(7,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
+    model = ARIMA(train, seasonal_order=(4,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
     model = model.fit(method_kwargs={"warn_convergence": False})
 
     forecast = model.predict(start=len(train)-delta, end=len(train)-delta +14)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     plt.show() 
     score = mean_squared_error(truth, forecast, squared = False)
     print('RMSE: {}'.format(round(score,4)))
-    """
+    #"""
 
     with open(args.output,"w") as f:
         f.write("date,operating_reserve(MW)")
