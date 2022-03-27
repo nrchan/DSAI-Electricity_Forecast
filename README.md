@@ -17,13 +17,13 @@
 
 ## 預測
 預測的方面最後採用了 SARIMA。另外還嘗試了 MA 和 ARIMA，但是結果比較差。以 2021 的 3/30 到 4/13 做測試的話結果如下：
-- MA
+- MA (RMSE = 255)
 <img src="MA.png" alt="(圖)MA" width="400">
 
-- ARIMA
+- ARIMA (RMSE = 173)
 <img src="ARIMA.png" alt="(圖)ARIMA" width="400">
 
-- SARIMA
+- SARIMA (RMSE = 142)
 <img src="SARIMA.png" alt="(圖)SARIMA" width="400">
 
 以方均根差衡量的話，MA 差的比較多，而 ARIMA 和 SARIMA 其實差不多。
@@ -31,4 +31,5 @@
 - 為了試圖把 non-staionary 換成 stationary，我在 d 的部分嘗試了各種數字，最後發現還是 1 次的效果最好。
 - p 的部分也是嘗試了各個數字，最後選擇了 4。其實選哪個好像沒什麼差，不過還是選了一個隨機抽查幾個日期時表現最好的。
 
-在測試的時候，每個日期得到的方均根差結果差很多。這個部分我就覺得有點靠運氣了...
+## 小結語
+在測試的時候，每個日期得到的方均根差結果差很多。不過...這個部分我就覺得有點靠運氣了...
