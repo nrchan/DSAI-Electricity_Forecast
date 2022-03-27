@@ -17,6 +17,11 @@
 
 ## 預測
 預測的方面最後採用了 SARIMA。另外還嘗試了 MA 和 ARIMA，但是結果比較差。以 2021 的 3/30 到 4/13 做測試的話結果如下：
-[MA](MA.png)
-[ARIMA](ARIMA.png)
-[SARIMA](SARIMA.png)
+- MA
+<img src="MA.png" alt="(圖)MA" width="400">
+
+- ARIMA
+<img src="ARIMA.png" alt="(圖)ARIMA" width="400">
+
+- SARIMA
+<img src="SARIMA.png" alt="(圖)SARIMA" width="400">
