@@ -42,7 +42,7 @@ if __name__ == '__main__':
     dfpast = pd.read_csv("data2021.csv", names=None, header=0)
     dfpast["日期"] = pd.to_datetime(dfpast["日期"], format="%Y%m%d")
     
-    df2022 = pd.read_csv("data2022.csv", names=None, header=0)
+    df2022 = pd.read_csv("https://data.taipower.com.tw/opendata/apply/file/d006002/%E6%9C%AC%E5%B9%B4%E5%BA%A6%E6%AF%8F%E6%97%A5%E5%B0%96%E5%B3%B0%E5%82%99%E8%BD%89%E5%AE%B9%E9%87%8F%E7%8E%87.csv", names=None, header=0)
     df2022["日期"] = pd.to_datetime(df2022["日期"], format="%Y/%m/%d")
     df2022["備轉容量(萬瓩)"] = 10*df2022["備轉容量(萬瓩)"]
     df2022 = df2022.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
@@ -50,6 +50,9 @@ if __name__ == '__main__':
     df = pd.concat([dfpast,df2022]).reset_index(drop = True).dropna(axis=1)
     #print(adf_test(df["備轉容量(MW)"]))
     #print(kpss_test(df["備轉容量(MW)"]))
+
+    startDate = pd.Timestamp(2022,3,30,0)
+    delta = (df["日期"][len(df)-1] - startDate).days + 1
     
     """
     rolling_mean = df["備轉容量(MW)"].rolling(window=12).mean()
@@ -61,33 +64,13 @@ if __name__ == '__main__':
     plt.show()
     """
 
-    dftouse = np.asarray(df["備轉容量(MW)"])
-    train = dftouse[0:len(dftouse)-14]
-    test = dftouse[len(dftouse)-14:]
-
+    train = np.array(df["備轉容量(MW)"])
     model = ARIMA(train, seasonal_order=(7,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
     model = model.fit()
 
-    
-    predictions = model.predict(start=len(train), end=len(train)+len(test)-1)
-    arima_score = mean_squared_error(test, predictions, squared = False)
-    print('RMSE: {}'.format(round(arima_score,4)))
+    forecast = model.predict(start=len(train)-delta, end=len(train)-delta +14)
 
-    plt.figure(figsize = (10,6))
-    plt.plot(test, label = "true values", color = "cornflowerblue")
-    plt.plot(predictions,label = "forecasts", color='darkorange')
-    plt.title("ARIMA Model", size = 14)
-    plt.show()
-    """
-
-    train = np.asarray(df["備轉容量(MW)"])
-    model = ARIMA(train, seasonal_order=(7,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
-    model = model.fit()
-
-    forecast = model.predict(start=len(train), end=len(train)+14)
-    print(forecast)
-    plt.figure(figsize = (10,6))
-    plt.plot(forecast, color = "cornflowerblue")
-    plt.title("ARIMA Model", size = 14)
-    plt.show()
-    """
+    with open(args.output,"w") as f:
+        f.write("date,operating_reserve(MW)")
+        for i in range (0,15):
+            f.write(f"\n{(startDate + pd.DateOffset(days=i)).strftime('%Y%m%d')},{forecast[i]}")
