@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import argparse
 from statsmodels.tsa.stattools import kpss
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
-from sklearn.metrics import mean_squared_error
 
 def adf_test(timeseries):
     print('Results of Dickey-Fuller Test:')
@@ -22,11 +22,7 @@ def kpss_test(timeseries):
         kpss_output['Critical Value (%s)'%key] = value
     print(kpss_output)
 
-# You can write code above the if-main block.
 if __name__ == '__main__':
-    # You should not modify this part, but additional arguments are allowed.
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument('--training',
                        default='training_data.csv',
@@ -37,8 +33,8 @@ if __name__ == '__main__':
                         help='output file name')
     args = parser.parse_args()
 
-    # The following part is an example.
-    # You can modify it at will.
+    #-----分割線-----#
+    
     dfpast = pd.read_csv("data2021.csv", names=None, header=0)
     dfpast["日期"] = pd.to_datetime(dfpast["日期"], format="%Y%m%d")
     
@@ -53,16 +49,6 @@ if __name__ == '__main__':
 
     startDate = pd.Timestamp(2022,3,30,0)
     delta = (df["日期"][len(df)-1] - startDate).days + 1
-    
-    """
-    rolling_mean = df["備轉容量(MW)"].rolling(window=12).mean()
-    rolling_std = df["備轉容量(MW)"].rolling(window=12).std()
-    plt.figure(figsize = (10,6))
-    plt.plot(df["備轉容量(MW)"], color='cornflowerblue', label='Original')
-    plt.plot(rolling_mean, color='firebrick', label='Rolling Mean')
-    plt.plot(rolling_std, color='limegreen', label='Rolling Std')
-    plt.show()
-    """
 
     train = np.array(df["備轉容量(MW)"])
     model = ARIMA(train, seasonal_order=(7,1,5,7), enforce_stationarity=False, enforce_invertibility=False)
