@@ -45,8 +45,8 @@ if __name__ == '__main__':
     #dfpast["備轉容量(萬瓩)"] = 10*dfpast["備轉容量(萬瓩)"]
     #dfpast = dfpast.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
     
-    df2022 = pd.read_csv("https://data.taipower.com.tw/opendata/apply/file/d006002/%E6%9C%AC%E5%B9%B4%E5%BA%A6%E6%AF%8F%E6%97%A5%E5%B0%96%E5%B3%B0%E5%82%99%E8%BD%89%E5%AE%B9%E9%87%8F%E7%8E%87.csv", names=None, header=0)
-    #df2022 = pd.read_csv("data2022.csv", names=None, header=0)
+    #df2022 = pd.read_csv("https://data.taipower.com.tw/opendata/apply/file/d006002/%E6%9C%AC%E5%B9%B4%E5%BA%A6%E6%AF%8F%E6%97%A5%E5%B0%96%E5%B3%B0%E5%82%99%E8%BD%89%E5%AE%B9%E9%87%8F%E7%8E%87.csv", names=None, header=0)
+    df2022 = pd.read_csv("data2022.csv", names=None, header=0)
     df2022["日期"] = pd.to_datetime(df2022["日期"], format="%Y/%m/%d")
     df2022["備轉容量(萬瓩)"] = 10*df2022["備轉容量(萬瓩)"]
     df2022 = df2022.rename(columns={"備轉容量(萬瓩)":"備轉容量(MW)"})
